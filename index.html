@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Mercadinho — PDV</title>
+<title>Mercearia Ponto Certo — PDV</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -21,6 +21,8 @@
   --amarelo-light: #fef3c7;
   --vermelho: #dc2626;
   --vermelho-light: #fee2e2;
+  --laranja: #ea580c;
+  --laranja-light: #ffedd5;
   --texto: #111827;
   --texto-mid: #4b5563;
   --texto-dim: #9ca3af;
@@ -48,7 +50,7 @@ body {
 header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 12px 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,16 +68,17 @@ header {
   box-shadow: 0 2px 8px rgba(22,163,74,0.25);
 }
 header h1 {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--texto);
   letter-spacing: -0.3px;
+  line-height: 1.2;
 }
-header .sub { font-size: 0.72rem; color: var(--texto-dim); font-weight: 500; }
+header .sub { font-size: 0.7rem; color: var(--texto-dim); font-weight: 500; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .clock {
   font-family: var(--mono);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: var(--texto);
   background: var(--surface2);
@@ -175,13 +178,25 @@ header .sub { font-size: 0.72rem; color: var(--texto-dim); font-weight: 500; }
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid var(--border);
   font-size: 0.88rem;
   font-weight: 500;
   transition: background 0.1s;
+  gap: 8px;
 }
 .sugestao-item:last-child { border-bottom: none; }
 .sugestao-item:hover { background: var(--verde-light); }
+.sugestao-val-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.sugestao-val-badge.vencido { background: var(--vermelho-light); color: var(--vermelho); }
+.sugestao-val-badge.critico { background: var(--laranja-light); color: var(--laranja); }
+.sugestao-val-badge.atencao { background: var(--amarelo-light); color: var(--amarelo); }
 
 /* SEARCH BAR */
 .search-bar {
@@ -246,6 +261,10 @@ tbody tr:hover { background: #fafbff; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr.novo { animation: flashGreen 0.5s ease; }
 @keyframes flashGreen { 0%{ background: rgba(22,163,74,0.12); } 100%{ background: transparent; } }
+tbody tr.row-vencido { background: rgba(220,38,38,0.05); }
+tbody tr.row-vencido:hover { background: rgba(220,38,38,0.08); }
+tbody tr.row-critico { background: rgba(234,88,12,0.05); }
+tbody tr.row-critico:hover { background: rgba(234,88,12,0.08); }
 td { padding: 12px 14px; font-size: 0.9rem; }
 td.nome { font-weight: 700; max-width: 190px; }
 td.codigo { font-family: var(--mono); font-size: 0.74rem; color: var(--texto-dim); }
@@ -289,6 +308,19 @@ td.actions { text-align: center; }
 }
 .btn-remover:hover { background: var(--vermelho-light); border-color: var(--vermelho); }
 
+/* VALIDADE TAG NA LINHA */
+.val-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.val-tag.vencido { background: var(--vermelho-light); color: var(--vermelho); }
+.val-tag.critico { background: var(--laranja-light); color: var(--laranja); }
+.val-tag.atencao { background: var(--amarelo-light); color: var(--amarelo); }
+
 /* EMPTY STATE */
 .empty-state {
   display: flex;
@@ -327,7 +359,7 @@ td.actions { text-align: center; }
 
 /* LOJA CONFIG */
 .configuracao {
-  padding: 12px 18px;
+  padding: 10px 18px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
@@ -476,6 +508,27 @@ td.actions { text-align: center; }
 .troco-result .t-label { color: var(--amarelo); font-size: 0.82rem; font-weight: 700; }
 .troco-result .t-val { color: var(--amarelo); font-family: var(--mono); font-weight: 700; font-size: 1rem; }
 
+/* CLIENTE */
+.cliente-area {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.cliente-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  color: var(--texto);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  outline: none;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.cliente-input:focus { border-color: var(--azul); background: white; }
+
 /* AÇÕES */
 .acoes {
   padding: 14px 18px;
@@ -581,9 +634,12 @@ td.actions { text-align: center; }
   transition: all 0.15s;
 }
 .search-result-item:hover { border-color: var(--verde); background: var(--verde-light); }
+.search-result-item.vencido { border-color: #fca5a5; }
+.search-result-item.critico { border-color: #fdba74; }
 .result-info .nome { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
 .result-info .cod { font-family: var(--mono); font-size: 0.72rem; color: var(--texto-dim); }
 .result-info .estoque { font-size: 0.78rem; color: var(--texto-mid); font-weight: 500; margin-top: 2px; }
+.result-info .validade { font-size: 0.72rem; margin-top: 3px; font-weight: 600; }
 .result-preco { font-family: var(--mono); font-size: 1.1rem; color: var(--verde); font-weight: 700; }
 
 /* MODAL SUCESSO */
@@ -636,11 +692,33 @@ td.actions { text-align: center; }
 .toast::before { content: '✓'; opacity: 0.7; }
 .toast.error { background: var(--vermelho); }
 .toast.error::before { content: '✕'; }
+.toast.warn { background: var(--laranja); }
+.toast.warn::before { content: '⚠️'; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 /* LOADER */
 .loader { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 7px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ALERTA VALIDADE MODAL */
+.alerta-validade-modal {
+  background: var(--vermelho-light);
+  border: 1.5px solid #fca5a5;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--vermelho);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.alerta-validade-modal.warn {
+  background: var(--laranja-light);
+  border-color: #fdba74;
+  color: var(--laranja);
+}
 
 /* MOBILE BOTTOM TABS */
 .mobile-tabs {
@@ -690,7 +768,7 @@ td.actions { text-align: center; }
   .mobile-tabs { display: block; }
   body { padding-bottom: 54px; }
   .clock { font-size: 0.9rem; padding: 5px 10px; }
-  header h1 { font-size: 1rem; }
+  header h1 { font-size: 0.9rem; }
 }
 @media (max-width: 480px) {
   .left-panel { font-size: 14px; }
@@ -706,8 +784,8 @@ td.actions { text-align: center; }
   <div class="header-brand">
     <div class="brand-icon">🛒</div>
     <div>
-      <h1>Mercadinho</h1>
-      <div class="sub">Frente de Caixa</div>
+      <h1>Mercearia Ponto Certo</h1>
+      <div class="sub">Frente de Caixa — PDV</div>
     </div>
   </div>
   <div class="header-right">
@@ -771,8 +849,14 @@ td.actions { text-align: center; }
     <div class="configuracao">
       <div class="config-row">
         <label>Loja:</label>
-        <input type="text" id="nome-loja" value="Mercadinho" placeholder="Nome da loja">
+        <input type="text" id="nome-loja" value="Mercearia Ponto Certo" placeholder="Nome da loja">
       </div>
+    </div>
+
+    <!-- CLIENTE (opcional) -->
+    <div class="cliente-area">
+      <div style="font-size:0.7rem;color:var(--texto-dim);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Cliente (opcional)</div>
+      <input type="text" class="cliente-input" id="nome-cliente" placeholder="Nome do cliente...">
     </div>
 
     <!-- TOTAIS -->
@@ -865,6 +949,21 @@ td.actions { text-align: center; }
   </div>
 </div>
 
+<!-- MODAL ALERTA VALIDADE -->
+<div class="modal-overlay" id="modal-validade-alerta">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <h3 id="modal-val-title">⚠️ Atenção — Validade do Produto</h3>
+      <button class="modal-close" onclick="fecharModal('modal-validade-alerta')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-val-body"></div>
+    <div style="padding:16px;display:flex;gap:10px;background:var(--surface2);border-top:1px solid var(--border)">
+      <button style="flex:1;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:white;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:0.9rem;color:var(--texto-mid)" onclick="fecharModal('modal-validade-alerta')">Cancelar</button>
+      <button id="btn-val-confirmar" style="flex:1;padding:12px;border:none;border-radius:10px;background:var(--vermelho);cursor:pointer;font-family:var(--sans);font-weight:700;font-size:0.9rem;color:white" onclick="confirmarAdicaoProduto()">Adicionar Mesmo Assim</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL SUCESSO -->
 <div class="modal-overlay" id="modal-sucesso">
   <div class="modal" style="max-width:420px">
@@ -888,6 +987,7 @@ const SUPABASE_KEY = 'sb_publishable_FTqVHiYDRfKecbqtWSazbg_6v-usDQM';
 let itens = [];
 let metodoPagamento = 'dinheiro';
 let totalFinal = 0;
+let produtoPendente = null; // produto aguardando confirmação de validade
 
 // === HELPERS ===
 async function sbFetch(endpoint, options = {}) {
@@ -914,16 +1014,38 @@ function formatarMoeda(val) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
 }
 
-function mostrarToast(msg, erro = false) {
+function mostrarToast(msg, tipo = '') {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
-  toast.className = `toast${erro ? ' error' : ''} show`;
-  setTimeout(() => toast.classList.remove('show'), 3000);
+  toast.className = `toast${tipo ? ' ' + tipo : ''} show`;
+  setTimeout(() => toast.classList.remove('show'), tipo === 'warn' ? 4000 : 3000);
 }
 
 function fecharModal(id) {
   document.getElementById(id).classList.remove('show');
   document.getElementById('barcode-input').focus();
+}
+
+// === VALIDADE HELPERS ===
+function diasParaVencer(dataValidade) {
+  if (!dataValidade) return null;
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const val = new Date(dataValidade + 'T00:00:00');
+  return Math.round((val - hoje) / (1000*60*60*24));
+}
+
+function fmtDataSimples(d) {
+  if (!d) return '—';
+  const [y,m,dia] = d.split('-');
+  return `${dia}/${m}/${y}`;
+}
+
+function statusValidade(dias) {
+  if (dias === null) return null;
+  if (dias < 0) return 'vencido';
+  if (dias <= 7) return 'critico';
+  if (dias <= 30) return 'atencao';
+  return 'ok';
 }
 
 // === RELÓGIO ===
@@ -962,7 +1084,6 @@ async function setupTabelas() {
 
 // === SCANNER ===
 const barcodeInput = document.getElementById('barcode-input');
-let barcodeBuffer = '';
 let barcodeTimer = null;
 
 barcodeInput.addEventListener('input', async (e) => {
@@ -988,15 +1109,25 @@ barcodeInput.addEventListener('keydown', async (e) => {
 
 async function buscarSugestoes(termo) {
   try {
-    const produtos = await sbFetch(`produtos?nome=ilike.*${encodeURIComponent(termo)}*&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque&limit=6`);
+    const produtos = await sbFetch(`produtos?nome=ilike.*${encodeURIComponent(termo)}*&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque,data_validade&limit=6`);
     const lista = document.getElementById('sugestoes-lista');
     if (!produtos.length) { lista.style.display = 'none'; return; }
-    lista.innerHTML = produtos.map(p => `
-      <div class="sugestao-item" onclick="adicionarProduto(${JSON.stringify(p).replace(/"/g,'&quot;')}); document.getElementById('barcode-input').value=''; document.getElementById('sugestoes-lista').style.display='none'">
+    lista.innerHTML = produtos.map(p => {
+      const dias = diasParaVencer(p.data_validade);
+      const status = statusValidade(dias);
+      let valBadge = '';
+      if (status === 'vencido') valBadge = `<span class="sugestao-val-badge vencido">🚫 Vencido</span>`;
+      else if (status === 'critico') valBadge = `<span class="sugestao-val-badge critico">⏰ ${dias}d</span>`;
+      else if (status === 'atencao') valBadge = `<span class="sugestao-val-badge atencao">⚠️ ${dias}d</span>`;
+      return `
+      <div class="sugestao-item" onclick="verificarEAdicionarProduto(${JSON.stringify(p).replace(/"/g,'&quot;')}); document.getElementById('barcode-input').value=''; document.getElementById('sugestoes-lista').style.display='none'">
         <span>${p.nome}</span>
-        <span style="font-family:var(--mono);color:var(--verde);font-weight:700">${formatarMoeda(p.preco_venda)}</span>
-      </div>
-    `).join('');
+        <div style="display:flex;align-items:center;gap:6px">
+          ${valBadge}
+          <span style="font-family:var(--mono);color:var(--verde);font-weight:700">${formatarMoeda(p.preco_venda)}</span>
+        </div>
+      </div>`;
+    }).join('');
     lista.style.display = 'block';
   } catch(e) {}
 }
@@ -1006,9 +1137,9 @@ async function buscarPorCodigo(codigo) {
   status.textContent = 'Buscando...';
   status.className = 'scan-status';
   try {
-    const produtos = await sbFetch(`produtos?codigo_barras=eq.${encodeURIComponent(codigo)}&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque&limit=1`);
+    const produtos = await sbFetch(`produtos?codigo_barras=eq.${encodeURIComponent(codigo)}&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque,data_validade&limit=1`);
     if (produtos.length > 0) {
-      adicionarProduto(produtos[0]);
+      verificarEAdicionarProduto(produtos[0]);
       status.textContent = `✅ ${produtos[0].nome}`;
       status.className = 'scan-status found';
     } else {
@@ -1027,31 +1158,94 @@ async function buscarPorNome() {
   const termo = document.getElementById('search-input').value.trim();
   if (!termo) return;
   try {
-    const produtos = await sbFetch(`produtos?nome=ilike.*${encodeURIComponent(termo)}*&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque&order=nome`);
+    const produtos = await sbFetch(`produtos?nome=ilike.*${encodeURIComponent(termo)}*&ativo=eq.true&select=id,nome,codigo_barras,preco_venda,estoque,data_validade&order=nome`);
     const container = document.getElementById('search-results');
     if (!produtos.length) {
       container.innerHTML = '<p style="text-align:center;color:var(--texto-dim);padding:24px;font-weight:500">Nenhum produto encontrado</p>';
     } else {
-      container.innerHTML = produtos.map(p => `
-        <div class="search-result-item" onclick="adicionarProduto(${JSON.stringify(p).replace(/"/g,'&quot;')}); fecharModal('modal-busca')">
+      container.innerHTML = produtos.map(p => {
+        const dias = diasParaVencer(p.data_validade);
+        const status = statusValidade(dias);
+        let valStr = '';
+        if (status === 'vencido') valStr = `<div class="validade" style="color:var(--vermelho)">🚫 Vencido em ${fmtDataSimples(p.data_validade)}</div>`;
+        else if (status === 'critico') valStr = `<div class="validade" style="color:var(--laranja)">⏰ Vence em ${dias} dia(s) — ${fmtDataSimples(p.data_validade)}</div>`;
+        else if (status === 'atencao') valStr = `<div class="validade" style="color:var(--amarelo)">⚠️ Vence em ${dias} dias — ${fmtDataSimples(p.data_validade)}</div>`;
+        else if (p.data_validade) valStr = `<div class="validade" style="color:var(--verde)">✅ Val: ${fmtDataSimples(p.data_validade)}</div>`;
+        const itemClass = status === 'vencido' ? ' vencido' : status === 'critico' ? ' critico' : '';
+        return `
+        <div class="search-result-item${itemClass}" onclick="verificarEAdicionarProduto(${JSON.stringify(p).replace(/"/g,'&quot;')}); fecharModal('modal-busca')">
           <div class="result-info">
             <div class="nome">${p.nome}</div>
             <div class="cod">Cód: ${p.codigo_barras || 'S/N'}</div>
             <div class="estoque">Estoque: ${p.estoque} un</div>
+            ${valStr}
           </div>
           <div class="result-preco">${formatarMoeda(p.preco_venda)}</div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
     document.getElementById('modal-busca').classList.add('show');
   } catch(e) {
-    mostrarToast('Erro ao buscar: ' + e.message, true);
+    mostrarToast('Erro ao buscar: ' + e.message, 'error');
   }
 }
 
 document.getElementById('search-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') buscarPorNome();
 });
+
+// === VERIFICAÇÃO DE VALIDADE ANTES DE ADICIONAR ===
+function verificarEAdicionarProduto(produto) {
+  const dias = diasParaVencer(produto.data_validade);
+  const status = statusValidade(dias);
+
+  if (status === 'vencido') {
+    produtoPendente = produto;
+    document.getElementById('modal-val-title').textContent = '🚫 Produto Vencido!';
+    document.getElementById('modal-val-body').innerHTML = `
+      <div class="alerta-validade-modal">
+        <span style="font-size:1.5rem">🚫</span>
+        <div>
+          <strong style="display:block;margin-bottom:4px">${produto.nome}</strong>
+          Data de validade: <strong>${fmtDataSimples(produto.data_validade)}</strong><br>
+          Este produto está vencido há <strong>${Math.abs(dias)} dia(s)</strong>.<br><br>
+          <span style="font-size:0.85rem;opacity:0.85">Não recomendamos a venda de produtos vencidos. Deseja adicionar mesmo assim?</span>
+        </div>
+      </div>`;
+    document.getElementById('btn-val-confirmar').style.background = 'var(--vermelho)';
+    document.getElementById('modal-validade-alerta').classList.add('show');
+    return;
+  }
+
+  if (status === 'critico') {
+    produtoPendente = produto;
+    document.getElementById('modal-val-title').textContent = '⏰ Validade Próxima';
+    document.getElementById('modal-val-body').innerHTML = `
+      <div class="alerta-validade-modal warn">
+        <span style="font-size:1.5rem">⏰</span>
+        <div>
+          <strong style="display:block;margin-bottom:4px">${produto.nome}</strong>
+          Data de validade: <strong>${fmtDataSimples(produto.data_validade)}</strong><br>
+          Vence em <strong>${dias} dia(s)</strong>.<br><br>
+          <span style="font-size:0.85rem;opacity:0.85">Informe o cliente sobre o prazo de validade próximo.</span>
+        </div>
+      </div>`;
+    document.getElementById('btn-val-confirmar').style.background = 'var(--laranja)';
+    document.getElementById('modal-validade-alerta').classList.add('show');
+    return;
+  }
+
+  // Produto ok — adicionar diretamente
+  adicionarProduto(produto);
+}
+
+function confirmarAdicaoProduto() {
+  if (produtoPendente) {
+    adicionarProduto(produtoPendente);
+    produtoPendente = null;
+  }
+  fecharModal('modal-validade-alerta');
+}
 
 // === ADICIONAR PRODUTO ===
 function adicionarProduto(produto) {
@@ -1065,7 +1259,8 @@ function adicionarProduto(produto) {
       codigo_barras: produto.codigo_barras || '',
       preco_venda: parseFloat(produto.preco_venda),
       quantidade: 1,
-      estoque: produto.estoque
+      estoque: produto.estoque,
+      data_validade: produto.data_validade || null
     });
   }
   renderItens();
@@ -1090,10 +1285,22 @@ function renderItens() {
   table.style.display = 'table';
   document.getElementById('btn-finalizar').disabled = false;
 
-  tbody.innerHTML = itens.map((item, i) => `
-    <tr id="row-${i}" class="${i === itens.length-1 ? 'novo' : ''}">
+  tbody.innerHTML = itens.map((item, i) => {
+    const dias = diasParaVencer(item.data_validade);
+    const status = statusValidade(dias);
+    let rowClass = i === itens.length-1 ? 'novo' : '';
+    let valTag = '';
+    if (status === 'vencido') { rowClass += ' row-vencido'; valTag = `<div><span class="val-tag vencido">🚫 Vencido</span></div>`; }
+    else if (status === 'critico') { rowClass += ' row-critico'; valTag = `<div><span class="val-tag critico">⏰ ${dias}d</span></div>`; }
+    else if (status === 'atencao') { valTag = `<div><span class="val-tag atencao">⚠️ ${dias}d</span></div>`; }
+
+    return `
+    <tr id="row-${i}" class="${rowClass.trim()}">
       <td style="color:var(--texto-dim);font-size:0.78rem;font-weight:600">${i+1}</td>
-      <td class="nome">${item.nome}</td>
+      <td class="nome">
+        ${item.nome}
+        ${valTag}
+      </td>
       <td class="codigo">${item.codigo_barras || '—'}</td>
       <td class="qtd">
         <div class="qty-control">
@@ -1105,8 +1312,8 @@ function renderItens() {
       <td class="preco">${formatarMoeda(item.preco_venda)}</td>
       <td class="subtotal">${formatarMoeda(item.preco_venda * item.quantidade)}</td>
       <td class="actions"><button class="btn-remover" onclick="removerItem(${i})">✕</button></td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
 }
 
 function alterarQtd(idx, delta) {
@@ -1171,6 +1378,7 @@ async function finalizarVenda() {
     const descVal = parseFloat(document.getElementById('desconto-valor').value) || 0;
     const descTipo = document.getElementById('desconto-tipo').value;
     const desconto = descTipo === 'percent' ? (subtotal * descVal / 100) : Math.min(descVal, subtotal);
+    const cliente = document.getElementById('nome-cliente').value.trim();
 
     const venda = await sbFetch('vendas', {
       method: 'POST',
@@ -1181,7 +1389,7 @@ async function finalizarVenda() {
         desconto: desconto,
         metodo_pagamento: metodoPagamento,
         total_itens: itens.reduce((s, i) => s + i.quantidade, 0),
-        loja_nome: document.getElementById('nome-loja').value || 'Mercadinho',
+        loja_nome: document.getElementById('nome-loja').value || 'Mercearia Ponto Certo',
         criado_em: new Date().toISOString()
       })
     });
@@ -1210,17 +1418,21 @@ async function finalizarVenda() {
       });
     }
 
+    const troco = metodoPagamento === 'dinheiro'
+      ? `<br>Troco: <strong>${document.getElementById('troco-val').textContent}</strong>`
+      : '';
+
     document.getElementById('sucesso-detalhe').innerHTML = `
       <strong>Venda #${vendaId}</strong><br>
+      ${cliente ? `Cliente: <strong>${cliente}</strong><br>` : ''}
       Total: <strong style="color:var(--verde)">${formatarMoeda(totalFinal)}</strong><br>
-      Pagamento: ${metodoPagamento.toUpperCase()}<br>
-      ${metodoPagamento === 'dinheiro' ? `Troco: <strong>${document.getElementById('troco-val').textContent}</strong>` : ''}
+      Pagamento: ${metodoPagamento.toUpperCase()}${troco}
     `;
     document.getElementById('modal-sucesso').classList.add('show');
     mostrarToast('Venda finalizada com sucesso!');
 
   } catch(e) {
-    mostrarToast('Erro ao finalizar: ' + e.message, true);
+    mostrarToast('Erro ao finalizar: ' + e.message, 'error');
     btn.disabled = false;
     btn.innerHTML = '✅ FINALIZAR VENDA';
   }
@@ -1230,8 +1442,10 @@ function novaVenda() {
   itens = [];
   metodoPagamento = 'dinheiro';
   totalFinal = 0;
+  produtoPendente = null;
   document.getElementById('desconto-valor').value = '';
   document.getElementById('valor-recebido').value = '';
+  document.getElementById('nome-cliente').value = '';
   document.getElementById('troco-val').textContent = 'R$ 0,00';
   document.getElementById('scan-status').textContent = 'Aguardando leitura...';
   document.getElementById('scan-status').className = 'scan-status';
