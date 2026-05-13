@@ -706,18 +706,38 @@ td.actions { text-align: center; }
   border: 1.5px solid var(--border);
   border-radius: 10px;
   color: var(--texto-mid);
-  padding: 7px 13px;
+  padding: 8px 14px;
   font-family: var(--sans);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.15s;
+  gap: 7px;
+  transition: all 0.2s;
   white-space: nowrap;
+  line-height: 1;
 }
 .btn-turno:hover { background: var(--vermelho-light); border-color: var(--vermelho); color: var(--vermelho); }
+.btn-turno.aberto {
+  background: var(--vermelho);
+  border-color: var(--vermelho);
+  color: white;
+  box-shadow: 0 2px 10px rgba(220,38,38,0.3);
+  animation: pulse-btn 2.5s infinite;
+}
+.btn-turno.aberto:hover { background: #b91c1c; border-color: #b91c1c; }
+@keyframes pulse-btn {
+  0%, 100% { box-shadow: 0 2px 10px rgba(220,38,38,0.3); }
+  50% { box-shadow: 0 2px 18px rgba(220,38,38,0.55); }
+}
+.btn-turno.fechado {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: white;
+  box-shadow: 0 2px 10px rgba(22,163,74,0.25);
+}
+.btn-turno.fechado:hover { background: #15803d; border-color: #15803d; }
 .turno-ativo-badge {
   background: var(--verde-light);
   border: 1.5px solid #86efac;
@@ -1648,18 +1668,19 @@ async function iniciarTurno() {
 function atualizarBadgeTurno() {
   const badge = document.getElementById('turno-badge');
   const badgeTxt = document.getElementById('turno-badge-txt');
+  const btn = document.getElementById('btn-turno');
   if (turnoAtivo) {
     badge.style.display = 'flex';
     const h = new Date(turnoAtivo.abertura).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
     badgeTxt.textContent = `${turnoAtivo.colaborador || 'Turno'} desde ${h}`;
-    document.getElementById('btn-turno').innerHTML = '🔒 Fechar Caixa';
-    document.getElementById('btn-turno').style.borderColor = 'var(--vermelho)';
-    document.getElementById('btn-turno').style.color = 'var(--vermelho)';
+    btn.innerHTML = '🔒 Fechar Caixa';
+    btn.className = 'btn-turno aberto';
+    btn.title = `Turno de ${turnoAtivo.colaborador} — clique para fechar`;
   } else {
     badge.style.display = 'none';
-    document.getElementById('btn-turno').innerHTML = '🔓 Abrir Caixa';
-    document.getElementById('btn-turno').style.borderColor = '';
-    document.getElementById('btn-turno').style.color = '';
+    btn.innerHTML = '🔓 Abrir Caixa';
+    btn.className = 'btn-turno fechado';
+    btn.title = 'Nenhum turno aberto — clique para abrir';
   }
 }
 
@@ -1697,9 +1718,11 @@ async function abrirModalTurno() {
     body.innerHTML = `<div class="loader-full" style="padding:30px;"><div class="spinner"></div> Calculando vendas do turno...</div>`;
     
     try {
-      const abertura = turnoAtivo.abertura;
+      // Garantir formato ISO correto — substitui espaço por T e remove milissegundos problemáticos
+      const aberturaRaw = turnoAtivo.abertura || '';
+      const abertura = aberturaRaw.replace(' ', 'T').replace(/(\.\d+)([+-]\d{2}:\d{2}|Z)?$/, (_, ms, tz) => tz || 'Z');
       const agora = new Date().toISOString();
-      const vendas = await sbFetch(`vendas?criado_em=gte.${abertura}&criado_em=lte.${agora}&order=criado_em.desc`);
+      const vendas = await sbFetch(`vendas?criado_em=gte.${encodeURIComponent(abertura)}&criado_em=lte.${encodeURIComponent(agora)}&order=criado_em.desc`);
       
       const totMetodos = { dinheiro:0, pix:0, debito:0, credito:0 };
       let totalVendido = 0;
