@@ -700,6 +700,139 @@ td.actions { text-align: center; }
 .loader { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 7px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* BOTÃO FECHAR EXPEDIENTE */
+.btn-turno {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--texto-mid);
+  padding: 7px 13px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-turno:hover { background: var(--vermelho-light); border-color: var(--vermelho); color: var(--vermelho); }
+.turno-ativo-badge {
+  background: var(--verde-light);
+  border: 1.5px solid #86efac;
+  border-radius: 10px;
+  padding: 5px 11px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--verde);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.turno-ativo-badge .dot-turno {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--verde);
+  animation: pulse 1.5s infinite;
+}
+
+/* MODAL TURNO */
+.turno-resumo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.turno-card {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.turno-card.verde { border-color: #86efac; background: var(--verde-light); }
+.turno-card.azul { border-color: #93c5fd; background: var(--azul-light); }
+.turno-card.amarelo { border-color: #fcd34d; background: var(--amarelo-light); }
+.turno-card .tc-label { font-size: 0.7rem; font-weight: 700; color: var(--texto-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.turno-card .tc-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--texto); }
+.turno-card.verde .tc-val { color: var(--verde); }
+.turno-card.azul .tc-val { color: var(--azul); }
+.turno-card.amarelo .tc-val { color: var(--amarelo); }
+.metodos-resumo { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.metodo-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 13px;
+  background: var(--surface2);
+  border-radius: 9px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.metodo-linha .ml-label { color: var(--texto-mid); }
+.metodo-linha .ml-val { font-family: var(--mono); color: var(--texto); font-size: 0.85rem; font-weight: 700; }
+.turno-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.turno-form-row label { font-size: 0.75rem; font-weight: 700; color: var(--texto-mid); text-transform: uppercase; letter-spacing: 0.4px; }
+.turno-form-row input, .turno-form-row textarea {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  color: var(--texto);
+  font-size: 0.95rem;
+  padding: 10px 13px;
+  outline: none;
+  font-family: var(--sans);
+  font-weight: 500;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+.turno-form-row input:focus, .turno-form-row textarea:focus { border-color: var(--azul); background: white; }
+.turno-form-row textarea { resize: none; min-height: 58px; font-size: 0.88rem; }
+.btn-fechar-turno {
+  width: 100%;
+  background: var(--vermelho);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220,38,38,0.25);
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+.btn-fechar-turno:hover { background: #b91c1c; }
+.btn-fechar-turno:disabled { opacity: 0.6; cursor: not-allowed; }
+.modal-turno { max-width: 460px; }
+.alerta-sem-caixa {
+  background: var(--amarelo-light);
+  border: 1.5px solid #fcd34d;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--amarelo);
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.turno-sucesso {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+.turno-sucesso .ts-icon { font-size: 3.5rem; margin-bottom: 12px; }
+.turno-sucesso .ts-title { font-size: 1.25rem; font-weight: 800; color: var(--texto); margin-bottom: 6px; }
+.turno-sucesso .ts-sub { font-size: 0.88rem; color: var(--texto-dim); font-weight: 500; }
+
 /* ALERTA VALIDADE MODAL */
 .alerta-validade-modal {
   background: var(--vermelho-light);
@@ -789,7 +922,14 @@ td.actions { text-align: center; }
     </div>
   </div>
   <div class="header-right">
+    <div class="turno-ativo-badge" id="turno-badge" style="display:none">
+      <span class="dot-turno"></span>
+      <span id="turno-badge-txt">Turno aberto</span>
+    </div>
     <div class="clock" id="clock">00:00:00</div>
+    <button class="btn-turno" onclick="abrirModalTurno()" id="btn-turno" title="Abrir/Fechar Caixa">
+      🔒 Fechar Caixa
+    </button>
     <div class="conexao-dot" title="Supabase conectado"></div>
   </div>
 </header>
@@ -979,6 +1119,19 @@ td.actions { text-align: center; }
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- MODAL TURNO / FECHAMENTO DE CAIXA -->
+<div class="modal-overlay" id="modal-turno">
+  <div class="modal modal-turno">
+    <div class="modal-header">
+      <h3 id="modal-turno-title">🔒 Fechar Caixa</h3>
+      <button class="modal-close" onclick="fecharModal('modal-turno')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-turno-body">
+      <!-- conteúdo dinâmico -->
+    </div>
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://djmjrcodognfwkzoayhn.supabase.co';
@@ -1466,7 +1619,244 @@ function cancelarVenda() {
 }
 
 setupTabelas();
+iniciarTurno();
 document.getElementById('barcode-input').focus();
+
+// === SISTEMA DE TURNO ===
+let turnoAtivo = null;
+let turnoVendasContador = 0;
+let turnoTotalAcumulado = 0;
+
+async function iniciarTurno() {
+  // Verificar se há turno aberto no localStorage (fallback sem Supabase)
+  const turnoLocal = localStorage.getItem('turno_ativo');
+  if (turnoLocal) {
+    turnoAtivo = JSON.parse(turnoLocal);
+    atualizarBadgeTurno();
+  }
+  // Tentar buscar do Supabase
+  try {
+    const turnos = await sbFetch('turnos_caixa?status=eq.aberto&order=abertura.desc&limit=1');
+    if (turnos.length > 0) {
+      turnoAtivo = turnos[0];
+      localStorage.setItem('turno_ativo', JSON.stringify(turnoAtivo));
+      atualizarBadgeTurno();
+    }
+  } catch(e) { /* offline: usar localStorage */ }
+}
+
+function atualizarBadgeTurno() {
+  const badge = document.getElementById('turno-badge');
+  const badgeTxt = document.getElementById('turno-badge-txt');
+  if (turnoAtivo) {
+    badge.style.display = 'flex';
+    const h = new Date(turnoAtivo.abertura).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    badgeTxt.textContent = `${turnoAtivo.colaborador || 'Turno'} desde ${h}`;
+    document.getElementById('btn-turno').innerHTML = '🔒 Fechar Caixa';
+    document.getElementById('btn-turno').style.borderColor = 'var(--vermelho)';
+    document.getElementById('btn-turno').style.color = 'var(--vermelho)';
+  } else {
+    badge.style.display = 'none';
+    document.getElementById('btn-turno').innerHTML = '🔓 Abrir Caixa';
+    document.getElementById('btn-turno').style.borderColor = '';
+    document.getElementById('btn-turno').style.color = '';
+  }
+}
+
+async function abrirModalTurno() {
+  const body = document.getElementById('modal-turno-body');
+  document.getElementById('modal-turno').classList.add('show');
+
+  if (!turnoAtivo) {
+    // Modal de ABERTURA
+    document.getElementById('modal-turno-title').textContent = '🔓 Abertura de Caixa';
+    body.innerHTML = `
+      <div class="alerta-sem-caixa">
+        <span style="font-size:1.4rem">ℹ️</span>
+        <div>Registre a abertura do caixa antes de iniciar as vendas. Isso cria um turno que será vinculado às suas vendas do período.</div>
+      </div>
+      <div class="turno-form-row">
+        <label>Colaborador *</label>
+        <input type="text" id="turno-colaborador" placeholder="Seu nome" autofocus>
+      </div>
+      <div class="turno-form-row">
+        <label>Valor em caixa na abertura (R$)</label>
+        <input type="number" id="turno-valor-abertura" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="turno-form-row">
+        <label>Observação (opcional)</label>
+        <textarea id="turno-obs-abertura" placeholder="Ex: Abertura turno manhã..."></textarea>
+      </div>
+      <button class="btn-fechar-turno" style="background:var(--verde);box-shadow:0 4px 14px rgba(22,163,74,0.25)" onclick="abrirCaixa()">
+        🔓 Abrir Caixa Agora
+      </button>`;
+    setTimeout(() => document.getElementById('turno-colaborador')?.focus(), 100);
+  } else {
+    // Modal de FECHAMENTO — calcular vendas do turno
+    document.getElementById('modal-turno-title').textContent = '🔒 Fechamento de Caixa';
+    body.innerHTML = `<div class="loader-full" style="padding:30px;"><div class="spinner"></div> Calculando vendas do turno...</div>`;
+    
+    try {
+      const abertura = turnoAtivo.abertura;
+      const agora = new Date().toISOString();
+      const vendas = await sbFetch(`vendas?criado_em=gte.${abertura}&criado_em=lte.${agora}&order=criado_em.desc`);
+      
+      const totMetodos = { dinheiro:0, pix:0, debito:0, credito:0 };
+      let totalVendido = 0;
+      vendas.forEach(v => {
+        const t = parseFloat(v.total) || 0;
+        totalVendido += t;
+        if (totMetodos[v.metodo_pagamento] !== undefined) totMetodos[v.metodo_pagamento] += t;
+      });
+      
+      const hrAbertura = new Date(turnoAtivo.abertura).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+      const hrAgora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+      const durMin = Math.round((Date.now() - new Date(turnoAtivo.abertura).getTime()) / 60000);
+      const durHr = Math.floor(durMin / 60);
+      const durRest = durMin % 60;
+      const durStr = durHr > 0 ? `${durHr}h ${durRest}min` : `${durMin}min`;
+      const fmt = v => new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(v);
+      
+      body.innerHTML = `
+        <div class="turno-resumo-grid">
+          <div class="turno-card verde">
+            <div class="tc-label">Total Vendido</div>
+            <div class="tc-val">${fmt(totalVendido)}</div>
+          </div>
+          <div class="turno-card azul">
+            <div class="tc-label">Vendas Realizadas</div>
+            <div class="tc-val">${vendas.length} venda${vendas.length !== 1 ? 's' : ''}</div>
+          </div>
+          <div class="turno-card" style="grid-column:1/-1;background:var(--surface2)">
+            <div class="tc-label">Período · <span style="font-weight:400">${new Date(turnoAtivo.abertura).toLocaleDateString('pt-BR')} · ${hrAbertura} → ${hrAgora} (${durStr})</span></div>
+            <div class="tc-val" style="font-size:0.9rem;color:var(--texto-mid)">${turnoAtivo.colaborador || '—'}</div>
+          </div>
+        </div>
+        <div style="font-size:0.75rem;font-weight:700;color:var(--texto-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Por forma de pagamento</div>
+        <div class="metodos-resumo">
+          <div class="metodo-linha"><span class="ml-label">💵 Dinheiro</span><span class="ml-val">${fmt(totMetodos.dinheiro)}</span></div>
+          <div class="metodo-linha"><span class="ml-label">📱 PIX</span><span class="ml-val">${fmt(totMetodos.pix)}</span></div>
+          <div class="metodo-linha"><span class="ml-label">💳 Débito</span><span class="ml-val">${fmt(totMetodos.debito)}</span></div>
+          <div class="metodo-linha"><span class="ml-label">💳 Crédito</span><span class="ml-val">${fmt(totMetodos.credito)}</span></div>
+        </div>
+        <div class="turno-form-row">
+          <label>Valor físico no caixa (R$) — contagem manual</label>
+          <input type="number" id="turno-valor-fechamento" placeholder="0,00" min="0" step="0.01" 
+                 value="${turnoAtivo.valor_abertura || ''}">
+        </div>
+        <div class="turno-form-row">
+          <label>Observação do fechamento (opcional)</label>
+          <textarea id="turno-obs-fechamento" placeholder="Ex: Fechamento turno tarde, sem divergências..."></textarea>
+        </div>
+        <button class="btn-fechar-turno" id="btn-confirmar-fechamento" onclick="fecharCaixa(${vendas.length}, ${totalVendido}, ${JSON.stringify(totMetodos).replace(/"/g,'\'')})">
+          🔒 Confirmar Fechamento de Caixa
+        </button>`;
+    } catch(e) {
+      body.innerHTML = `<div style="padding:20px;color:var(--vermelho);text-align:center;font-weight:600">Erro ao carregar vendas: ${e.message}</div>`;
+    }
+  }
+}
+
+async function abrirCaixa() {
+  const colaborador = document.getElementById('turno-colaborador')?.value.trim();
+  if (!colaborador) { mostrarToast('Informe o nome do colaborador', 'warn'); return; }
+  const valorAbertura = parseFloat(document.getElementById('turno-valor-abertura')?.value) || 0;
+  const obs = document.getElementById('turno-obs-abertura')?.value.trim() || '';
+
+  try {
+    const novoTurno = {
+      colaborador,
+      abertura: new Date().toISOString(),
+      valor_abertura: valorAbertura,
+      observacao_abertura: obs,
+      status: 'aberto'
+    };
+    
+    try {
+      const res = await sbFetch('turnos_caixa', { method: 'POST', prefer: 'return=representation', body: JSON.stringify(novoTurno) });
+      turnoAtivo = res[0];
+    } catch(e) {
+      // Fallback localStorage
+      turnoAtivo = { ...novoTurno, id: Date.now() };
+    }
+    
+    localStorage.setItem('turno_ativo', JSON.stringify(turnoAtivo));
+    atualizarBadgeTurno();
+    fecharModal('modal-turno');
+    mostrarToast(`✅ Caixa aberto — ${colaborador}`);
+  } catch(e) {
+    mostrarToast('Erro ao abrir caixa: ' + e.message, 'error');
+  }
+}
+
+async function fecharCaixa(qtdVendas, totalVendido, totMetodos) {
+  const btn = document.getElementById('btn-confirmar-fechamento');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span> Fechando...';
+
+  const valorFechamento = parseFloat(document.getElementById('turno-valor-fechamento')?.value) || 0;
+  const obs = document.getElementById('turno-obs-fechamento')?.value.trim() || '';
+  const agora = new Date().toISOString();
+  const durMin = Math.round((Date.now() - new Date(turnoAtivo.abertura).getTime()) / 60000);
+  const diferenca = valorFechamento - (totMetodos.dinheiro + (turnoAtivo.valor_abertura || 0));
+
+  const dadosFechamento = {
+    fechamento: agora,
+    status: 'fechado',
+    valor_fechamento: valorFechamento,
+    total_vendido: totalVendido,
+    qtd_vendas: qtdVendas,
+    total_dinheiro: totMetodos.dinheiro,
+    total_pix: totMetodos.pix,
+    total_debito: totMetodos.debito,
+    total_credito: totMetodos.credito,
+    diferenca_caixa: diferenca,
+    observacao_fechamento: obs,
+    duracao_minutos: durMin
+  };
+
+  try {
+    if (typeof turnoAtivo.id === 'number' && turnoAtivo.id > 1700000000000) {
+      // ID local (fallback) — salvar completo no localStorage
+      const historico = JSON.parse(localStorage.getItem('turnos_historico') || '[]');
+      historico.unshift({ ...turnoAtivo, ...dadosFechamento });
+      localStorage.setItem('turnos_historico', JSON.stringify(historico.slice(0, 100)));
+    } else {
+      await sbFetch(`turnos_caixa?id=eq.${turnoAtivo.id}`, {
+        method: 'PATCH',
+        prefer: 'return=minimal',
+        body: JSON.stringify(dadosFechamento)
+      });
+    }
+  } catch(e) { /* salvar localmente se Supabase falhar */ 
+    const historico = JSON.parse(localStorage.getItem('turnos_historico') || '[]');
+    historico.unshift({ ...turnoAtivo, ...dadosFechamento });
+    localStorage.setItem('turnos_historico', JSON.stringify(historico.slice(0, 100)));
+  }
+
+  turnoAtivo = null;
+  localStorage.removeItem('turno_ativo');
+  atualizarBadgeTurno();
+
+  const fmt = v => new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(v);
+  const body = document.getElementById('modal-turno-body');
+  body.innerHTML = `
+    <div class="turno-sucesso">
+      <div class="ts-icon">✅</div>
+      <div class="ts-title">Caixa Fechado!</div>
+      <div class="ts-sub">O resumo do turno foi registrado com sucesso.</div>
+    </div>
+    <div class="metodos-resumo" style="margin-top:18px">
+      <div class="metodo-linha"><span class="ml-label">💰 Total vendido</span><span class="ml-val" style="color:var(--verde)">${fmt(totalVendido)}</span></div>
+      <div class="metodo-linha"><span class="ml-label">🧾 Vendas realizadas</span><span class="ml-val">${qtdVendas}</span></div>
+      <div class="metodo-linha"><span class="ml-label">⏱ Duração do turno</span><span class="ml-val">${durMin >= 60 ? Math.floor(durMin/60)+'h '+(durMin%60)+'min' : durMin+'min'}</span></div>
+      ${diferenca !== 0 ? `<div class="metodo-linha"><span class="ml-label">📊 Diferença caixa</span><span class="ml-val" style="color:${diferenca >= 0 ? 'var(--verde)' : 'var(--vermelho)'}">${diferenca >= 0 ? '+' : ''}${fmt(diferenca)}</span></div>` : ''}
+    </div>
+    <button class="btn-fechar-turno" style="margin-top:16px;background:var(--azul);box-shadow:0 4px 14px rgba(37,99,235,0.2)" onclick="fecharModal('modal-turno')">
+      Fechar
+    </button>`;
+  mostrarToast('✅ Caixa fechado com sucesso!');
+}
 </script>
 </body>
 </html>
