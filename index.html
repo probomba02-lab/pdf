@@ -1661,20 +1661,23 @@ async function finalizarVenda() {
     // === REGISTRAR NA TABELA fiados se metodo for fiado ===
     if (metodoPagamento === 'fiado') {
       const vencimento = new Date();
-      vencimento.setDate(vencimento.getDate() + 30); // 30 dias de prazo padrão
-      await sbFetch('fiados', {
-        method: 'POST',
-        prefer: 'return=minimal',
-        body: JSON.stringify({
-          cliente_nome: cliente,
-          valor: totalFinal,
-          venda_id: vendaId,
-          status: 'pendente',
-          data_vencimento: vencimento.toISOString().split('T')[0],
-          observacao: `Venda #${vendaId} — ${itens.length} item(s)`,
-          criado_em: new Date().toISOString()
-        })
-      });
+      vencimento.setDate(vencimento.getDate() + 30);
+      try {
+        await sbFetch('fiados', {
+          method: 'POST',
+          prefer: 'return=minimal',
+          body: JSON.stringify({
+            cliente_nome: cliente,
+            valor: totalFinal,
+            venda_id: vendaId,
+            status: 'pendente',
+            data_vencimento: vencimento.toISOString().split('T')[0],
+            observacao: 'Venda #' + vendaId + ' — ' + itens.length + ' item(s)'
+          })
+        });
+      } catch(eFiado) {
+        mostrarToast('⚠️ Venda salva, mas erro no fiado: ' + eFiado.message, 'warn');
+      }
     }
 
     const troco = metodoPagamento === 'dinheiro'
