@@ -478,6 +478,32 @@ td.actions { text-align: center; }
   color: white;
   box-shadow: 0 2px 8px rgba(22,163,74,0.25);
 }
+.metodo-fiado {
+  border-color: rgba(124,58,237,0.3);
+  color: #7c3aed;
+  background: rgba(124,58,237,0.05);
+}
+.metodo-fiado:hover { border-color: #7c3aed !important; color: #7c3aed !important; background: rgba(124,58,237,0.1) !important; }
+.metodo-fiado.ativo {
+  background: #7c3aed !important;
+  border-color: #7c3aed !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.3) !important;
+}
+/* Aviso fiado */
+.fiado-aviso {
+  background: rgba(124,58,237,0.06);
+  border: 1.5px solid rgba(124,58,237,0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: #7c3aed;
+  font-weight: 600;
+  display: none;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.fiado-aviso.show { display: block; }
 
 .troco-area { display: none; }
 .troco-area.show { display: block; }
@@ -1060,6 +1086,7 @@ td.actions { text-align: center; }
         <button class="metodo-btn" onclick="selecionarMetodo(this,'pix')">📱 PIX</button>
         <button class="metodo-btn" onclick="selecionarMetodo(this,'debito')">💳 Débito</button>
         <button class="metodo-btn" onclick="selecionarMetodo(this,'credito')">💳 Crédito</button>
+        <button class="metodo-btn metodo-fiado" onclick="selecionarMetodo(this,'fiado')" style="grid-column:1/-1">📒 Venda Fiada</button>
       </div>
       <div class="troco-area show" id="troco-area">
         <label>Valor recebido (R$)</label>
@@ -1068,6 +1095,10 @@ td.actions { text-align: center; }
           <span class="t-label">Troco</span>
           <span class="t-val" id="troco-val">R$ 0,00</span>
         </div>
+      </div>
+      <div class="fiado-aviso" id="fiado-aviso">
+        📒 Venda fiada — o valor será registrado como débito do cliente.<br>
+        <span style="font-weight:500;opacity:0.8">Certifique-se de preencher o nome do cliente acima.</span>
       </div>
     </div>
 
@@ -1535,13 +1566,49 @@ function selecionarMetodo(btn, metodo) {
   btn.classList.add('ativo');
   metodoPagamento = metodo;
   const trocoArea = document.getElementById('troco-area');
-  if (metodo === 'dinheiro') trocoArea.classList.add('show');
-  else trocoArea.classList.remove('show');
+  const fiadoAviso = document.getElementById('fiado-aviso');
+  const btnFinalizar = document.getElementById('btn-finalizar');
+  if (metodo === 'dinheiro') {
+    trocoArea.classList.add('show');
+    fiadoAviso.classList.remove('show');
+    btnFinalizar.style.background = '';
+    btnFinalizar.innerHTML = '✅ FINALIZAR VENDA';
+  } else if (metodo === 'fiado') {
+    trocoArea.classList.remove('show');
+    fiadoAviso.classList.add('show');
+    btnFinalizar.style.background = '#7c3aed';
+    btnFinalizar.innerHTML = '📒 REGISTRAR FIADO';
+    // Focar no campo cliente se estiver vazio
+    const cliente = document.getElementById('nome-cliente');
+    if (!cliente.value.trim()) {
+      cliente.focus();
+      cliente.style.borderColor = '#7c3aed';
+      setTimeout(() => { cliente.style.borderColor = ''; }, 2000);
+    }
+  } else {
+    trocoArea.classList.remove('show');
+    fiadoAviso.classList.remove('show');
+    btnFinalizar.style.background = '';
+    btnFinalizar.innerHTML = '✅ FINALIZAR VENDA';
+  }
 }
 
 // === FINALIZAR ===
 async function finalizarVenda() {
   if (itens.length === 0) return;
+
+  // Validação especial para fiado: exige cliente
+  if (metodoPagamento === 'fiado') {
+    const cliente = document.getElementById('nome-cliente').value.trim();
+    if (!cliente) {
+      mostrarToast('⚠️ Informe o nome do cliente para registrar fiado!', 'warn');
+      document.getElementById('nome-cliente').focus();
+      document.getElementById('nome-cliente').style.borderColor = '#7c3aed';
+      setTimeout(() => { document.getElementById('nome-cliente').style.borderColor = ''; }, 2500);
+      return;
+    }
+  }
+
   const btn = document.getElementById('btn-finalizar');
   btn.disabled = true;
   btn.innerHTML = '<span class="loader"></span> Registrando...';
@@ -1594,12 +1661,15 @@ async function finalizarVenda() {
     const troco = metodoPagamento === 'dinheiro'
       ? `<br>Troco: <strong>${document.getElementById('troco-val').textContent}</strong>`
       : '';
+    const fiadoMsg = metodoPagamento === 'fiado'
+      ? `<br><span style="color:#7c3aed;font-weight:700">📒 Registrado como fiado</span>`
+      : '';
 
     document.getElementById('sucesso-detalhe').innerHTML = `
       <strong>Venda #${vendaId}</strong><br>
       ${cliente ? `Cliente: <strong>${cliente}</strong><br>` : ''}
       Total: <strong style="color:var(--verde)">${formatarMoeda(totalFinal)}</strong><br>
-      Pagamento: ${metodoPagamento.toUpperCase()}${troco}
+      Pagamento: ${metodoPagamento.toUpperCase()}${troco}${fiadoMsg}
     `;
     document.getElementById('modal-sucesso').classList.add('show');
     mostrarToast('Venda finalizada com sucesso!');
@@ -1625,7 +1695,10 @@ function novaVenda() {
   document.querySelectorAll('.metodo-btn').forEach(b => b.classList.remove('ativo'));
   document.querySelector('.metodo-btn').classList.add('ativo');
   document.getElementById('troco-area').classList.add('show');
-  document.getElementById('btn-finalizar').innerHTML = '✅ FINALIZAR VENDA';
+  document.getElementById('fiado-aviso').classList.remove('show');
+  const btnFinalizar = document.getElementById('btn-finalizar');
+  btnFinalizar.innerHTML = '✅ FINALIZAR VENDA';
+  btnFinalizar.style.background = '';
   renderItens();
   atualizarTotais();
   fecharModal('modal-sucesso');
